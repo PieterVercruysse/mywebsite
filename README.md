@@ -1,1 +1,6 @@
 # mywebsite
+
+"italics"
+
+**bold**
+
