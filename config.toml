@@ -1,5 +1,5 @@
 # Site settings
-baseURL = "pietervercruysse-portfolio.netlify.app/"
+baseURL = "https://pietervercruysse-portfolio.netlify.app/"
 languageCode = "en-us"
 title = "Portfolio website for Pieter Vercruysse"
 theme = "forty"
