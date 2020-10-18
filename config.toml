@@ -96,7 +96,7 @@ theme = "forty"
       title = "Gross Domestic Product"
       subtitle = "GDP components over time and among countries"
       image = "pic01.jpg"
-      url = "blogs/aliquam"
+      url = "projects/project2"
 
     [[params.tiles.showcase]]
       title = "Yield Curve Inversion"
