@@ -102,7 +102,7 @@ theme = "forty"
       title = "Yield Curve Inversion"
       subtitle = "How to predict a recession"
       image = "pic02.jpg"
-      url = "blogs/tempus"
+      url = "projects/project3"
 
     [[params.tiles.showcase]]
       title = "Wage Gap"
