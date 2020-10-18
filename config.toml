@@ -93,14 +93,14 @@ theme = "forty"
     # Display your showcases here. 
     
     [[params.tiles.showcase]]
-      title = "Aliquam"
-      subtitle = "Ipsum Dolor Sit Amet"
+      title = "Gross Domestic Product"
+      subtitle = "GDP components over time and among countries"
       image = "pic01.jpg"
       url = "blogs/aliquam"
 
     [[params.tiles.showcase]]
-      title = "Tempus"
-      subtitle = "Feugiat Amet Tempus"
+      title = "Yield Curve Inversion"
+      subtitle = "How to predict a recession"
       image = "pic02.jpg"
       url = "blogs/tempus"
 
@@ -111,8 +111,8 @@ theme = "forty"
       url = "blogs/magna"
 
     [[params.tiles.showcase]]
-      title = "Ipsum"
-      subtitle = "Nisl Sed Aliquam"
+      title = "IMDB ratings"
+      subtitle = "Are S. Spielberg and T. Burton as popular?"
       image = "pic04.jpg"
       url = "blogs/ipsum"
 
