@@ -105,8 +105,8 @@ theme = "forty"
       url = "blogs/tempus"
 
     [[params.tiles.showcase]]
-      title = "Magna"
-      subtitle = "Lorem Etiam Nullam"
+      title = "Wage Gap"
+      subtitle = "Is gender the only important factor?"
       image = "pic03.jpg"
       url = "blogs/magna"
 
