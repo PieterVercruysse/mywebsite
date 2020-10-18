@@ -1,0 +1,106 @@
+---
+title: "IMDB Ratings"
+author: "Author: MFA - Stream A - Group 7"
+#date: "2020-10-18"
+output:
+  html_document:
+    theme: flatly
+    highlight: zenburn
+    number_sections: yes
+    toc: yes
+    toc_float: yes
+    code_folding: show
+---
+
+
+
+<p><em>Is the difference in mean IMBD ratings for S. Spielberg and T. Burton statistically significant?</em></p>
+<p>We will explore whether the mean IMDB rating for Steven Spielberg and Tim Burton are the same or not. We will plot the confidence intervals for the mean rating per director and check if they overlap.</p>
+<p>Lets start by explicitly stating our null-hypothesis and alternative hypothesis:
+H0: there is no difference in the mean IMDB-rating for movies produced by Steven Spielberg or Tim Burton.
+Ha: There is a significant difference between these mean IMDB-ratings.</p>
+<p>Now, lets load the data and examine its structure.</p>
+<pre class="r"><code>movies &lt;- read_csv(here::here(&quot;data&quot;, &quot;movies.csv&quot;))
+glimpse(movies)</code></pre>
+<pre><code>## Rows: 2,961
+## Columns: 11
+## $ title               &lt;chr&gt; &quot;Avatar&quot;, &quot;Titanic&quot;, &quot;Jurassic World&quot;, &quot;The Aveng…
+## $ genre               &lt;chr&gt; &quot;Action&quot;, &quot;Drama&quot;, &quot;Action&quot;, &quot;Action&quot;, &quot;Action&quot;, …
+## $ director            &lt;chr&gt; &quot;James Cameron&quot;, &quot;James Cameron&quot;, &quot;Colin Trevorro…
+## $ year                &lt;dbl&gt; 2009, 1997, 2015, 2012, 2008, 1999, 1977, 2015, 2…
+## $ duration            &lt;dbl&gt; 178, 194, 124, 173, 152, 136, 125, 141, 164, 93, …
+## $ gross               &lt;dbl&gt; 7.61e+08, 6.59e+08, 6.52e+08, 6.23e+08, 5.33e+08,…
+## $ budget              &lt;dbl&gt; 2.37e+08, 2.00e+08, 1.50e+08, 2.20e+08, 1.85e+08,…
+## $ cast_facebook_likes &lt;dbl&gt; 4834, 45223, 8458, 87697, 57802, 37723, 13485, 92…
+## $ votes               &lt;dbl&gt; 886204, 793059, 418214, 995415, 1676169, 534658, …
+## $ reviews             &lt;dbl&gt; 3777, 2843, 1934, 2425, 5312, 3917, 1752, 1752, 3…
+## $ rating              &lt;dbl&gt; 7.9, 7.7, 7.0, 8.1, 9.0, 6.5, 8.7, 7.5, 8.5, 7.2,…</code></pre>
+<p>The following code will create the plot of the confidence intervals we previously discussed.</p>
+<pre class="r"><code>movies1 &lt;- movies %&gt;% 
+  filter(director %in% c(&quot;Steven Spielberg&quot;, &quot;Tim Burton&quot;)) %&gt;%
+  select(director, rating) %&gt;%
+  group_by(director) %&gt;%
+  summarize(avg_rating= mean(rating), 
+            count = n(),
+            sderror = sd(rating)/sqrt(count-1)) %&gt;%
+  mutate(upper_limit = avg_rating + 1.96*sderror,
+         lower_limit = avg_rating - 1.96*sderror) %&gt;%
+  arrange(avg_rating)
+
+ggplot(movies1, mapping=aes(
+  x = avg_rating,
+  y= reorder(director, avg_rating), 
+  colour = director)) + geom_errorbarh(
+    movies1, 
+    width=.03, 
+  mapping=aes(
+    xmin=upper_limit, 
+    xmax=lower_limit)) + theme_bw() + 
+  geom_point(movies1, mapping=aes(
+    x=avg_rating, 
+    size = 4)) + theme(legend.position = &quot;none&quot;) + 
+  geom_rect(
+    movies1[1,], 
+    mapping = aes(
+      xmin = 7.28, 
+      xmax = 7.31, 
+      ymin = 0, 
+      ymax = 3, 
+      color = NA, 
+      alpha = 0.2)) + 
+  geom_text(aes(
+    x = upper_limit, 
+    y = director, 
+    label=round(upper_limit, 2)), vjust = -1.5, color = &quot;black&quot;) + 
+  geom_text(aes(
+    x = lower_limit, 
+    y = director, 
+    label=round(lower_limit, 2)), vjust = -1.5, color = &quot;black&quot;) +
+  geom_text(aes(
+    x= avg_rating, 
+    y = director, 
+    label=round(avg_rating, 2)), vjust = -1.5, color = &quot;black&quot;, size = 6) + 
+  labs(title = &quot;Do Spielberg and Burton have the same mean IMDB ratings?&quot;,            
+       subtitle = &quot;95% confidence intervals overlap&quot;) + 
+  theme(axis.title.y = element_blank()) + 
+  xlab(&quot;Mean IMDB Rating&quot;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-1-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>Since these intervals overlap, we will run a hypothesis test to help us draw a conclusion.</p>
+<pre class="r"><code>ratings_2directors &lt;- movies %&gt;%
+   filter(director == &quot;Tim Burton&quot;|director == &quot;Steven Spielberg&quot;) %&gt;% 
+   group_by(director) %&gt;%  
+   select(director, rating)
+
+t.test(rating ~ director, data = ratings_2directors)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  rating by director
+## t = 3, df = 31, p-value = 0.01
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  0.16 1.13
+## sample estimates:
+## mean in group Steven Spielberg       mean in group Tim Burton 
+##                           7.57                           6.93</code></pre>
+<p>Since the t-test gives us a p-value of 0.01, we can refute our null-hypothesis and confidently state that the true difference in mean ratings for both directors is not zero.</p>

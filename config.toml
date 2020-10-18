@@ -111,7 +111,7 @@ theme = "forty"
       url = "projects/project1"
 
     [[params.tiles.showcase]]
-      title = "IMDB ratings"
+      title = "IMDB Ratings"
       subtitle = "Are S. Spielberg and T. Burton as popular?"
       image = "pic04.jpg"
       url = "projects/project4"

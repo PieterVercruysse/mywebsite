@@ -1,0 +1,126 @@
+---
+title: "IMDB Ratings"
+author: "Author: MFA - Stream A - Group 7"
+#date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: flatly
+    highlight: zenburn
+    number_sections: yes
+    toc: yes
+    toc_float: yes
+    code_folding: show
+---
+
+```{r, setup, echo=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE, 
+  warning = FALSE, 
+  tidy=FALSE,     # display code as typed
+  size="small")   # slightly smaller font for code
+options(digits = 3)
+
+# default figure size
+knitr::opts_chunk$set(
+  fig.width=6.75, 
+  fig.height=6.75,
+  fig.align = "center"
+)
+```
+
+```{r load-libraries, echo=FALSE}
+library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
+library(mosaic)
+library(ggthemes)
+library(GGally)
+library(readxl)
+library(here)
+library(skimr)
+library(janitor)
+library(broom)
+library(tidyquant)
+library(infer)
+library(openintro)
+library(tidyquant)
+```
+
+*Is the difference in mean IMBD ratings for S. Spielberg and T. Burton statistically significant?*
+
+We will explore whether the mean IMDB rating for Steven Spielberg and Tim Burton are the same or not. We will plot the confidence intervals for the mean rating per director and check if they overlap.
+
+Lets start by explicitly stating our null-hypothesis and alternative hypothesis:
+H0: there is no difference in the mean IMDB-rating for movies produced by Steven Spielberg or Tim Burton. 
+Ha: There is a significant difference between these mean IMDB-ratings.
+
+Now, lets load the data and examine its structure. 
+
+```{r load-movies-data}
+movies <- read_csv(here::here("data", "movies.csv"))
+glimpse(movies)
+```
+
+The following code will create the plot of the confidence intervals we previously discussed.  
+
+```{r}
+movies1 <- movies %>% 
+  filter(director %in% c("Steven Spielberg", "Tim Burton")) %>%
+  select(director, rating) %>%
+  group_by(director) %>%
+  summarize(avg_rating= mean(rating), 
+            count = n(),
+            sderror = sd(rating)/sqrt(count-1)) %>%
+  mutate(upper_limit = avg_rating + 1.96*sderror,
+         lower_limit = avg_rating - 1.96*sderror) %>%
+  arrange(avg_rating)
+
+ggplot(movies1, mapping=aes(
+  x = avg_rating,
+  y= reorder(director, avg_rating), 
+  colour = director)) + geom_errorbarh(
+    movies1, 
+    width=.03, 
+  mapping=aes(
+    xmin=upper_limit, 
+    xmax=lower_limit)) + theme_bw() + 
+  geom_point(movies1, mapping=aes(
+    x=avg_rating, 
+    size = 4)) + theme(legend.position = "none") + 
+  geom_rect(
+    movies1[1,], 
+    mapping = aes(
+      xmin = 7.28, 
+      xmax = 7.31, 
+      ymin = 0, 
+      ymax = 3, 
+      color = NA, 
+      alpha = 0.2)) + 
+  geom_text(aes(
+    x = upper_limit, 
+    y = director, 
+    label=round(upper_limit, 2)), vjust = -1.5, color = "black") + 
+  geom_text(aes(
+    x = lower_limit, 
+    y = director, 
+    label=round(lower_limit, 2)), vjust = -1.5, color = "black") +
+  geom_text(aes(
+    x= avg_rating, 
+    y = director, 
+    label=round(avg_rating, 2)), vjust = -1.5, color = "black", size = 6) + 
+  labs(title = "Do Spielberg and Burton have the same mean IMDB ratings?",            
+       subtitle = "95% confidence intervals overlap") + 
+  theme(axis.title.y = element_blank()) + 
+  xlab("Mean IMDB Rating")
+```
+
+Since these intervals overlap, we will run a hypothesis test to help us draw a conclusion.
+
+```{r}
+ratings_2directors <- movies %>%
+   filter(director == "Tim Burton"|director == "Steven Spielberg") %>% 
+   group_by(director) %>%  
+   select(director, rating)
+
+t.test(rating ~ director, data = ratings_2directors)
+```
+
+Since the t-test gives us a p-value of 0.01, we can refute our null-hypothesis and confidently state that the true difference in mean ratings for both directors is not zero.
