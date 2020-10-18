@@ -28,7 +28,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-
 ```{r load-libraries, echo=FALSE}
 library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
 library(mosaic)
@@ -45,13 +44,13 @@ library(openintro)
 library(tidyquant)
 ```
 
-# Omega Group plc- Pay Discrimination
+*Omega Group plc- Pay Discrimination*
 
 At the last board meeting of Omega Group Plc., the headquarters of a large multinational company, the issue was raised that women were being discriminated in the company, in the sense that the salaries were not the same for male and female executives. A quick analysis of a sample of 50 employees (of which 24 men and 26 women) revealed that the average salary for men was about 8,700 higher than for women. This seemed like a considerable difference, so it was decided that a further analysis of the company salaries was warranted. 
 
 Our objective is to find out whether there is indeed a significant difference between the salaries of men and women, and whether the difference is due to discrimination or whether it is based on another, possibly valid, determining factor.
 
-## Loading the data
+**Loading the data**
 
 Lets first load the data and get a glimpse of it.
 
@@ -60,7 +59,7 @@ omega <- read_csv(here::here("data", "omega.csv"))
 glimpse(omega) # examine the data frame
 ```
 
-## Relationship Salary - Gender ?
+**Relationship Salary - Gender ?**
 
 The data frame `omega` contains the salaries for the sample of 50 executives in the company. Can you conclude that there is a significant difference between the salaries of the male and female executives?
 
@@ -129,7 +128,7 @@ salary_in_null_world %>%
 
 > From t-test, we can see that the 95% CI range is negative and does not include zero. The p-value 2e-4 is also very small. This indicates that male excutives indeed have higher salaries. With the simulation method, we can see from the plot that the observed difference falls in the far left of the plot. We also calculated a p-value of 0.002, which is again very small. This result indicates that male excutives indeed have higher salaries as well.
 
-## Relationship Experience - Gender?
+**Relationship Experience - Gender?**
 
 At the board meeting, someone raised the issue that there was indeed a substantial difference between male and female salaries, but that this was attributable to other reasons such as differences in experience. A questionnaire sent out to the 50 executives in the sample reveals that the average experience of the men is approximately 21 years, whereas the women only have about 7 years experience on average (see table below).
 
@@ -199,7 +198,7 @@ experience_in_null_world %>%
 > From t-test, we can see that the 95% CI range is negative and does not include zero.The p-value 1e-05 is also very small. This indicates that male excutives indeed have more experience. With the simulation method, we can see from the plot that the observed difference falls in the far left of the plot. We also calculated a p-value of almost zero, which is again very small. This result indicates that male excutives indeed have more experience as well. 
 The result male executives having more experience endangers the previous result - male executives have higher salaries. For now it is possible that the salary differences result from experience gap instead gender difference.
 
-## Relationship Salary - Experience ?
+**Relationship Salary - Experience ?**
 
 Someone at the meeting argues that clearly, a more thorough analysis of the relationship between salary and experience is required before any conclusion can be drawn about whether there is any gender-based salary discrimination in the company.
 
@@ -222,7 +221,7 @@ ggplot(omega,aes(x=experience,y=salary))+
 
 >There is an obvious positive correlation between experience and salary, with the correlation value as high as 0.8. The degree of freedom is 48 and p-value is 2.257e-12 < 0.05(the p-value under df=48).Thus, the correlation between the two variables is significant.
 
-## Check correlations between the data
+**Check correlations between the data**
 
 Lets use `GGally:ggpairs()` to create a scatterplot and correlation matrix. Essentially, we change the order our variables will appear in and have the dependent variable (Y), salary, as last in our list. We then pipe the dataframe to `ggpairs()` with `aes` arguments to colour by `gender` and make ths plots somewhat transparent (`alpha  = 0.3`).
 

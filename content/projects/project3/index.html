@@ -14,11 +14,11 @@ output:
 
 
 
-<p>#Predicting a recession</p>
+<p><em>Predicting a recession</em></p>
 <p>Every so often, we hear warnings from commentators on the “inverted yield curve” and its predictive power with respect to recessions. An explainer what a <a href="https://www.reuters.com/article/us-usa-economy-yieldcurve-explainer/explainer-what-is-an-inverted-yield-curve-idUSKBN1O50GA">inverted yield curve is can be found here</a>. If you’d rather listen to something, here is a great podcast from <a href="https://www.podbean.com/media/share/dir-4zgj9-6aefd11">NPR on yield curve indicators</a></p>
 <p>In addition, many articles and commentators think that, e.g., <a href="https://www.bloomberg.com/news/articles/2019-08-14/u-k-yield-curve-inverts-for-first-time-since-financial-crisis"><em>Yield curve inversion is viewed as a harbinger of recession</em></a>. One can always doubt whether inversions are truly a harbinger of recessions, and <a href="https://twitter.com/5_min_macro/status/1161627360946511873">use the attached parable on yield curve inversions</a>.`</p>
 <p>In our case we will look at US data and use the <a href="https://fred.stlouisfed.org/">FRED database</a> to download historical yield curve rates, and plot the yield curves since 1999 to see when the yield curves flatten. If you want to know more, a very nice article that explains the <a href="https://fredblog.stlouisfed.org/2018/10/the-data-behind-the-fear-of-yield-curve-inversions/">yield curve is and its inversion can be found here</a>.</p>
-<p>##Editing the data in preparation of the analysis</p>
+<p><strong>Editing the data in preparation of the analysis</strong></p>
 <p>First, we will use the <code>tidyquant</code> package to download monthly rates for different durations.</p>
 <pre class="r"><code># Get a list of FRED codes for US rates and US yield curve; choose monthly frequency
 # to see, eg., the 3-month T-bill https://fred.stlouisfed.org/series/TB3MS
@@ -135,10 +135,8 @@ glimpse(df)</code></pre>
 </ul>
 <p>The first thing would be to join this dataframe <code>df</code> with the dataframe <code>mylookup</code> so we have a more readable version of maturities, durations, etc.</p>
 <pre class="r"><code>yield_curve &lt;-left_join(df,mylookup,by=&quot;symbol&quot;) </code></pre>
-<div id="plotting-the-yield-curve" class="section level2">
-<h2>Plotting the yield curve</h2>
-<div id="yields-on-us-rates-by-duration-since-1960" class="section level3">
-<h3>Yields on US rates by duration since 1960</h3>
+<p><strong>Plotting the yield curve</strong></p>
+<p><strong>Yields on US rates by duration since 1960</strong></p>
 <p>Lets start this chapter of by looking at the yields on US treasury rates since 1960. We will create a seperate graph for each security we want to study.</p>
 <pre class="r"><code>yield_curve$var_f&lt;-factor(yield_curve$var,levels=c(&quot;3-Month Treasury Bill&quot;,&quot;6-Month Treasury Bill&quot;,&quot;1-Year Treasury Rate&quot;,&quot;2-Year Treasury Rate&quot;,&quot;3-Year Treasury Rate&quot;,&quot;5-Year Treasury Rate&quot;,&quot;7-Year Treasury Rate&quot;,&quot;10-Year Treasury Rate&quot;,&quot;20-Year Treasury Rate&quot;,&quot;30-Year Treasury Rate&quot;))
 
@@ -156,9 +154,7 @@ yield_curve %&gt;%
   theme_bw() + 
   theme(legend.position = &quot;none&quot;)</code></pre>
 <p><img src="index_files/figure-html/yield_curve_per_type-1.png" width="100%" style="display: block; margin: auto;" /></p>
-</div>
-<div id="monthly-yields-on-us-rates-by-duration-since-1999-on-a-year-by-year-basis" class="section level3">
-<h3>Monthly yields on US rates by duration since 1999 on a year-by-year basis</h3>
+<p><strong>Monthly yields on US rates by duration since 1999 on a year-by-year basis</strong></p>
 <p>Then, lets look at the yield curve for US treasury securities on a year-by-year basis since 1999.</p>
 <pre class="r"><code>yield_curve %&gt;% 
   mutate(facet_year = year(ymd(date)), 
@@ -178,9 +174,7 @@ yield_curve %&gt;%
   theme_bw() + 
   theme(legend.position = &quot;none&quot;)</code></pre>
 <p><img src="index_files/figure-html/yield_curve_per_year-1.png" width="100%" style="display: block; margin: auto;" /></p>
-</div>
-<div id="month-and-10-year-yields-since-1999" class="section level3">
-<h3>3-month and 10-year yields since 1999</h3>
+<p><strong>3-month and 10-year yields since 1999</strong></p>
 <p>Now, lets study the evelution of 3-month and 10-year yields since 1999 a little closer.</p>
 <p>According to <a href="https://en.wikipedia.org/wiki/List_of_recessions_in_the_United_States">Wikipedia’s list of recession in the United States</a>, since 1999 there have been two recession in the US: between Mar 2001–Nov 2001 and between Dec 2007–June 2009. We are especially looking to find out if the yieldcurve flattened before these recessions. If that is the case, can a yield curve flattening really mean a recession is coming in the US? Since 1999, when did short-term (3 months) yield more than longer term (10 years) debt?</p>
 <pre class="r"><code>yield_curve %&gt;% 
@@ -199,7 +193,7 @@ yield_curve %&gt;%
   theme(legend.title = element_blank())</code></pre>
 <p><img src="index_files/figure-html/yield_curve_3m_and_10y-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>In the above graph, we observe that the yield for 3 month treasury bills has surpassed the yield for 10- year treasury notes only 3 times between 1999 and 2020. Note that this event indicates an inverse yield curve and is therefore preceded by the yield curve flattening. The two recessions in 2001 and 2007-2009 were clearly preceded by the flattening of the yieldcurve. The most recent time this flattening happenned was in 2019, as you are well aware, this was also followed by a recession. This final observation would indicate that investors anticipated the current recession, be it not in its current form.</p>
-<p>##Creating a plot that illustrates our findings</p>
+<p><strong>Creating a plot that illustrates our findings</strong></p>
 <p>Besides calculating the spread (10year - 3months), there are a few more things we need to do to produce a final plot that clearly summarizes all the things we have found so far and illustrates what we read/listened to in the attached documents.</p>
 <ol style="list-style-type: decimal">
 <li>Setup data for US recessions</li>
@@ -265,5 +259,3 @@ recessions &lt;- tibble(
   theme(plot.title = element_text(face=&quot;bold&quot;),
         plot.subtitle=element_text(face=&quot;italic&quot;, size = 7))</code></pre>
 <p><img src="index_files/figure-html/final%20graph-1.png" width="100%" style="display: block; margin: auto;" /></p>
-</div>
-</div>

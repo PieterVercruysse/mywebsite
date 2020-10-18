@@ -44,7 +44,7 @@ library(openintro)
 library(tidyquant)
 ```
 
-#Predicting a recession
+*Predicting a recession*
 
 Every so often, we hear warnings from commentators on the "inverted yield curve" and its predictive power with respect to recessions. An explainer what a [inverted yield curve is can be found here](https://www.reuters.com/article/us-usa-economy-yieldcurve-explainer/explainer-what-is-an-inverted-yield-curve-idUSKBN1O50GA). If you'd rather listen to something, here is a great podcast from [NPR on yield curve indicators](https://www.podbean.com/media/share/dir-4zgj9-6aefd11)
 
@@ -52,7 +52,7 @@ In addition, many articles and commentators think that, e.g., [*Yield curve inve
 
 In our case we will look at US data and use the [FRED database](https://fred.stlouisfed.org/) to download historical yield curve rates, and plot the yield curves since 1999 to see when the yield curves flatten. If you want to know more, a very nice article that explains the [yield curve is and its inversion can be found here](https://fredblog.stlouisfed.org/2018/10/the-data-behind-the-fear-of-yield-curve-inversions/).
 
-##Editing the data in preparation of the analysis
+**Editing the data in preparation of the analysis**
 
 First, we will use the `tidyquant` package to download monthly rates for different durations. 
 
@@ -114,9 +114,9 @@ The first thing would be to join this dataframe `df` with the dataframe `mylooku
 yield_curve <-left_join(df,mylookup,by="symbol") 
 ```
 
-## Plotting the yield curve
+**Plotting the yield curve**
 
-### Yields on US rates by duration since 1960
+**Yields on US rates by duration since 1960**
 
 Lets start this chapter of by looking at the yields on US treasury rates since 1960. We will create a seperate graph for each security we want to study. 
 
@@ -138,7 +138,7 @@ yield_curve %>%
   theme(legend.position = "none")
 ```
 
-### Monthly yields on US rates by duration since 1999 on a year-by-year basis
+**Monthly yields on US rates by duration since 1999 on a year-by-year basis**
 
 Then, lets look at the yield curve for US treasury securities on a year-by-year basis since 1999.
 
@@ -163,7 +163,7 @@ yield_curve %>%
 ```
 
 
-### 3-month and 10-year yields since 1999
+**3-month and 10-year yields since 1999**
 
 Now, lets study the evelution of 3-month and 10-year yields since 1999 a little closer.
 
@@ -188,7 +188,7 @@ yield_curve %>%
 
 In the above graph, we observe that the yield for 3 month treasury bills has surpassed the yield for 10- year treasury notes only 3 times between 1999 and 2020. Note that this event indicates an inverse yield curve and is therefore preceded by the yield curve flattening. The two recessions in 2001 and 2007-2009 were clearly preceded by the flattening of the yieldcurve. The most recent time this flattening happenned was in 2019, as you are well aware, this was also followed by a recession. This final observation would indicate that investors anticipated the current recession, be it not in its current form. 
 
-##Creating a plot that illustrates our findings
+**Creating a plot that illustrates our findings**
 
 Besides calculating the spread (10year - 3months), there are a few more things we need to do to produce a final plot that clearly summarizes all the things we have found so far and illustrates what we read/listened to in the attached documents.
 
