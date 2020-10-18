@@ -108,7 +108,7 @@ theme = "forty"
       title = "Wage Gap"
       subtitle = "A closer look at Omega Group plc"
       image = "pic03.jpg"
-      url = "project/project1"
+      url = "projects/project1"
 
     [[params.tiles.showcase]]
       title = "IMDB ratings"
