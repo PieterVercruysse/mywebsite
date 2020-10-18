@@ -106,7 +106,7 @@ theme = "forty"
 
     [[params.tiles.showcase]]
       title = "Wage Gap"
-      subtitle = "Is gender the only important factor?"
+      subtitle = "A closer look at Omega Group plc"
       image = "pic03.jpg"
       url = "blogs/magna"
 
